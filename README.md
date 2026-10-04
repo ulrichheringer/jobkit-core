@@ -2,7 +2,7 @@
 
 Small, typed background jobs for Python 3.11+ with real PostgreSQL and Redis storage. Jobs support delays, cron scheduling, retries, uniqueness, bounded execution and dead-job inspection. MIT licensed.
 
-The original `jobkit` name was already used on PyPI and GitHub; this distribution uses `jobkit-core` and imports as `jobkit`.
+The original `jobkit` name was already used on PyPI and GitHub; this distribution uses `jobkit-core` and imports as `jobkit_core`.
 
 ## Installation
 
@@ -10,14 +10,14 @@ The original `jobkit` name was already used on PyPI and GitHub; this distributio
 pip install 'jobkit-core[postgres]' # or jobkit-core[redis]
 ```
 
-No application containers are needed. PostgreSQL 14+ or Redis 6+ are external infrastructure. The base dependency is croniter; backend drivers are optional.
+No application containers are needed. PostgreSQL 14+ or Redis 6+ are external infrastructure. Runtime dependencies are croniter and, on Windows, tzdata for IANA timezone support; backend drivers are optional.
 
 ## Quick start
 
 ```python
 import asyncio
-from jobkit import Job, Worker
-from jobkit.postgres import PostgresStore
+from jobkit_core import Job, Worker
+from jobkit_core.postgres import PostgresStore
 
 store = PostgresStore(
     "postgresql://postgres:secret@localhost/jobs", concurrency_limit=4
@@ -39,7 +39,7 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
-For Redis use `RedisStore('redis://localhost:6379/0', namespace='emails', concurrency_limit=4)` from `jobkit.redis`. No initialization is needed. Use a dedicated namespace, configure AOF/RDB and replication according to your durability requirements, and prevent eviction of job keys. Redis operations use Lua and both keys share a cluster hash slot.
+For Redis use `RedisStore('redis://localhost:6379/0', namespace='emails', concurrency_limit=4)` from `jobkit_core.redis`. No initialization is needed. Use a dedicated namespace, configure AOF/RDB and replication according to your durability requirements, and prevent eviction of job keys. Redis operations use Lua and both keys share a cluster hash slot.
 
 ## Scheduling
 
@@ -47,7 +47,7 @@ For Redis use `RedisStore('redis://localhost:6379/0', namespace='emails', concur
 
 ```python
 from datetime import datetime, timezone
-from jobkit import next_cron
+from jobkit_core import next_cron
 
 at = next_cron("0 9 * * 1-5", datetime.now(timezone.utc), "America/Sao_Paulo")
 store.enqueue(Job.create("digest", None, at=at, unique_key=f"digest:{at.isoformat()}"))

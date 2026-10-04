@@ -2,8 +2,8 @@ import asyncio
 import os
 import uuid
 
-from jobkit import Job, Worker
-from jobkit.redis import RedisStore
+from jobkit_core import Job, Worker
+from jobkit_core.redis import RedisStore
 
 
 async def main() -> None:

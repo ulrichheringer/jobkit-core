@@ -7,9 +7,9 @@ from datetime import UTC, datetime
 
 import pytest
 
-from jobkit import CronSchedule, Job, Worker, next_cron
-from jobkit.postgres import PostgresStore
-from jobkit.redis import RedisStore
+from jobkit_core import CronSchedule, Job, Worker, next_cron
+from jobkit_core.postgres import PostgresStore
+from jobkit_core.redis import RedisStore
 
 
 @pytest.fixture(params=["postgres", "redis"])

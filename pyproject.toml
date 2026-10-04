@@ -9,7 +9,7 @@ description = "Small durable background jobs with PostgreSQL and Redis leases"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
-dependencies = ["croniter>=6,<7"]
+dependencies = ["croniter>=6,<7", "tzdata>=2025.1; sys_platform == 'win32'"]
 
 [project.optional-dependencies]
 postgres = ["psycopg[binary]>=3.2,<4"]
@@ -17,7 +17,7 @@ redis = ["redis>=5,<8"]
 dev = ["pytest>=8", "pytest-asyncio>=0.25", "ruff>=0.12", "mypy>=1.15", "types-croniter", "build", "psycopg[binary]>=3.2,<4", "redis>=5,<8"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/jobkit"]
+packages = ["src/jobkit_core"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

@@ -3,8 +3,8 @@
 import os
 from datetime import UTC, datetime
 
-from jobkit import CronSchedule
-from jobkit.redis import RedisStore
+from jobkit_core import CronSchedule
+from jobkit_core.redis import RedisStore
 
 store = RedisStore(os.environ.get("JOBKIT_REDIS", "redis://localhost:6379/0"))
 schedule = CronSchedule(
