@@ -105,13 +105,17 @@ class RedisStore:
 
     def get(self, job_id: str) -> Job | None:
         raw = self.client.hget(self.keys[0], job_id)
+        if raw is None:
+            return None
+        if not isinstance(raw, (str, bytes)):
+            raise TypeError("synchronous Redis client returned an invalid response")
         return decode(raw.decode() if isinstance(raw, bytes) else raw) if raw else None
 
     def dead_jobs(self) -> list[Job]:
-        jobs = [
-            decode(raw.decode() if isinstance(raw, bytes) else raw)
-            for raw in self.client.hvals(self.keys[0])
-        ]
+        rows = self.client.hvals(self.keys[0])
+        if not isinstance(rows, list):
+            raise TypeError("synchronous Redis client returned an invalid response")
+        jobs = [decode(raw.decode() if isinstance(raw, bytes) else raw) for raw in rows]
         return sorted(
             (j for j in jobs if j.status == "dead"), key=lambda j: (j.due, j.id)
         )

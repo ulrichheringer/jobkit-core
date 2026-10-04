@@ -151,6 +151,7 @@ def test_unsafe_payload_rejected(payload):
 
 
 def test_cron_and_configuration():
+    assert Job.create("immediate", None).due == 0
     after = datetime(2026, 1, 1, tzinfo=UTC)
     assert next_cron("0 9 * * *", after, "America/Sao_Paulo").hour == 12
     with pytest.raises(ValueError):

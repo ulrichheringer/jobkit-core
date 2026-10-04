@@ -67,7 +67,7 @@ class Job:
             raise ValueError("at must be timezone aware and cannot accompany delay")
         # Roundtrip isolates caller mutations and rejects NaN/infinity/pickle objects.
         safe = json.loads(json.dumps(payload, allow_nan=False))
-        due = at.timestamp() if at else time.time() + delay
+        due = at.timestamp() if at else (time.time() + delay if delay else 0)
         if not math.isfinite(due):
             raise ValueError("due must be finite")
         return cls(
